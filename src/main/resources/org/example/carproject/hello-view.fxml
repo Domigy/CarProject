@@ -16,7 +16,7 @@
    <TextField fx:id="name" />
    <Spinner fx:id="year" />
     <Button onAction="#addButton" text="Add!" />
-   <TableView prefHeight="200.0" prefWidth="200.0">
+   <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0">
      <columns>
        <TableColumn fx:id="tablelicensePlateNumbe" prefWidth="75.0" text="licensePlateNumber" />
        <TableColumn fx:id="tablename" prefWidth="75.0" text="name" />

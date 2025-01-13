@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.carproject.HelloController">
@@ -15,7 +16,13 @@
    <TextField fx:id="licensePlateNumber" />
    <TextField fx:id="name" />
    <Spinner fx:id="year" />
-    <Button onAction="#addButton" text="Add!" />
+   <HBox prefHeight="100.0" prefWidth="200.0">
+      <children>
+          <Button onAction="#addButton" text="Add!" />
+         <Button fx:id="saveData" mnemonicParsing="false" text="Mentés!" onAction="#saveData" />
+         <Button fx:id="loadData" mnemonicParsing="false" text="Betöltés!" onAction="#loadData" />
+      </children>
+   </HBox>
    <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0">
      <columns>
        <TableColumn fx:id="tablelicensePlateNumbe" prefWidth="75.0" text="licensePlateNumber" />

@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.ZoneId;
@@ -31,6 +32,10 @@ public class HelloController {
     private TextField name;
     @FXML
     private TableView table;
+    @FXML
+    private Button saveData;
+    @FXML
+    private Button loadData;
 
     @FXML
     public void addButton(ActionEvent actionEvent) {
@@ -89,5 +94,61 @@ public class HelloController {
 
         table.setItems(FXCollections.observableArrayList(carList));
 
+    }
+    @FXML
+    public void saveData(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Megerősítés");
+        alert.setHeaderText("Biztos, hogy el szeretné menteni az adatokat?");
+        alert.setContentText("A művelet végleges és nem visszavonható!");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("cars.csv"))) {
+                for (Car car : carList) {
+                    writer.write(car.getLicensePlateNumber() + "," + car.getName() + "," + car.getYear());
+                    writer.newLine();
+                }
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Mentés");
+                alert.setContentText("Az adatok sikeresen mentve lettek.");
+                alert.showAndWait();
+            } catch (IOException e) {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setContentText("Hiba történt a fájl mentésekor.");
+                alert.showAndWait();
+            }
+        }
+    }
+
+    @FXML
+    public void loadData(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Megerősítés");
+        alert.setHeaderText("Biztos, hogy be szeretné tölteni az adatokat?");
+        alert.setContentText("A művelet végleges és nem visszavonható!");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            try (BufferedReader reader = new BufferedReader(new FileReader("cars.csv"))) {
+                carList.clear();  // Ürítjük a listát
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 3) {
+                        carList.add(new Car(parts[0], parts[1], Integer.parseInt(parts[2])));
+                    }
+                }
+                table.setItems(FXCollections.observableArrayList(carList));  // Frissítjük a táblázatot
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Betöltés");
+                alert.setContentText("Az adatok sikeresen betöltve lettek.");
+                alert.showAndWait();
+            } catch (IOException e) {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Hiba");
+                alert.setContentText("Hiba történt a fájl betöltésekor.");
+                alert.showAndWait();
+            }
+        }
     }
 }
